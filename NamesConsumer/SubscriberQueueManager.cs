@@ -13,6 +13,7 @@ namespace NamesConsumer
         private static IConfiguration _configuration;
         private const string QueueName = "NamesQueue";
         private const string ExchangeName = "DirectRoutingExchange";
+        private const string RoutingKey = "Name";
         private string host;
         private string username;
         private string password;
@@ -41,7 +42,7 @@ namespace NamesConsumer
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
-                    channel.QueueBind(QueueName, ExchangeName, "Name");
+                    channel.QueueBind(QueueName, ExchangeName, RoutingKey);
 
                     var consumer = new EventingBasicConsumer(channel);
 
