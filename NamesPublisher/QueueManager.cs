@@ -16,35 +16,33 @@ namespace NamesPublisher
         private const string QueueName = "NamesQueue";
         private const string ExchangeName = "DirectRoutingExchange";
         private const string RoutingKey = "Name";
+
         public QueueManager(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
 
+
+        public IModel CreateConnection()
+        {
             string host = _configuration["RabbitMqHost"];
             string username = _configuration["RabbitMqUsername"];
             string password = _configuration["RabbitMqPassword"];
 
-            CreateConnection(host,username,password);
-        }
-
-
-        private static void CreateConnection(string host,string username,string password)
-        {
             _factory = new ConnectionFactory { HostName = host, UserName = username, Password = password };
             _connection = _factory.CreateConnection();
             _model = _connection.CreateModel();
             _model.ExchangeDeclare(ExchangeName, "direct");
             _model.QueueDeclare(QueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
             _model.QueueBind(QueueName, ExchangeName, RoutingKey);
+       
+            return _model;
         }
 
-        public void SendMessage(string message)
-        {     
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
-            var props = _model.CreateBasicProperties();
-            props.Persistent = true;
-
-            _model.BasicPublish("", QueueName, null, bytes);     
+        public string Queue {
+            get{ return QueueName; } 
         }
+
+   
     }
 }

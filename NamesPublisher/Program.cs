@@ -15,11 +15,18 @@ namespace NamesPublisher
             Console.WriteLine("Provide Name");
             var name = Console.ReadLine();
 
-            var publish = new QueueManager(config);
+            var queueManager = new QueueManager(config);
+            var connection = queueManager.CreateConnection();
 
             //Publish Name to RabbitMQ if not empty
             if (!string.IsNullOrEmpty(name))
-                publish.SendMessage(name);
+            {
+                var publish = new NamesPublisher();
+
+                publish.SendMessage(name,queueManager.Queue,connection);
+            }
+
+                
 
             Console.WriteLine(" Press [enter] to exit.");
             Console.ReadLine();

@@ -11,6 +11,7 @@ namespace NamesConsumer
         private static ConnectionFactory _factory;
         private static IConnection _connection;
         private static IConfiguration _configuration;
+        private IMessagePrinter _messagePrinter;
         private const string QueueName = "NamesQueue";
         private const string ExchangeName = "DirectRoutingExchange";
         private const string RoutingKey = "Name";
@@ -20,11 +21,12 @@ namespace NamesConsumer
 
         public SubscriberQueueManager(IConfiguration configuration)
         {
-            _configuration = configuration;
+             _configuration = configuration;
 
              host = _configuration["RabbitMqHost"];
              username = _configuration["RabbitMqUsername"];
              password = _configuration["RabbitMqPassword"];
+            _messagePrinter = new MessagePrinter();
         }
 
         public void RecieveMessages()
@@ -51,8 +53,7 @@ namespace NamesConsumer
                         consumer.Received += (model, ea) =>
                         {
                             var body = ea.Body.ToArray();
-                            var message = Encoding.UTF8.GetString(body);
-                            Console.WriteLine($"Hello {message}, I am your father!");
+                            _messagePrinter.MessageOutput(body);
                         };
 
                         channel.BasicConsume(queue: QueueName,
@@ -65,5 +66,6 @@ namespace NamesConsumer
                 }
             }
         }
+     
     }
 }
