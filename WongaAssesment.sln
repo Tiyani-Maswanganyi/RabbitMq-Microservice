@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamesPublisher.Tests", "Nam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamesConsumer.Tests", "ConsumerTests\NamesConsumer.Tests.csproj", "{65BDF7D4-A6CF-412B-95C2-24754B798B64}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RabbitMQServer", "RabbitMQServer", "{09D7D083-52DC-490F-A5D2-16E6E9FB51C3}"
+	ProjectSection(SolutionItems) = preProject
+		CreateServer.bat = CreateServer.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
